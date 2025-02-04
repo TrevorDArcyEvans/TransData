@@ -46,3 +46,8 @@ dotnet run
 ## Further work
 * upload to database
 
+
+## Acknowledgements
+* icon from [OPENCLIPART](https://openclipart.org/)
+  * [transpose](https://openclipart.org/detail/305559/transpose-pivottable-rotate-statistics)
+
