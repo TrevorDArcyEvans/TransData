@@ -39,11 +39,21 @@
       RowDefinitions="Auto,Auto,*,Auto">
 
       <TextBlock Grid.Row="0" Grid.Column="0" Text="Input:" />
-      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding InputFilePath, Mode=TwoWay}" />
-      <Button Grid.Row="0" Grid.Column="2" Content="Browse..." Command="{Binding OpenFromFileCommand}"/>
+      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding InputFilePath, Mode=TwoWay}" Watermark="Select input CSV file" />
+      <Button Grid.Row="0" Grid.Column="2" Content="Browse..." Command="{Binding OpenFromFileCommand}" />
 
-      <TextBox Grid.Row="3" Grid.Column="0" Text="Output:" />
-      <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding OutputFilePath, Mode=TwoWay}" />
+      <DataGrid
+        Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
+        Name="InputDataTable"
+        Margin="20"
+        AutoGenerateColumns="False"
+        IsReadOnly="True"
+        IsVisible="True"
+        GridLinesVisibility="All">
+      </DataGrid>
+
+      <TextBlock Grid.Row="3" Grid.Column="0" Text="Output:" />
+      <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding OutputFilePath, Mode=TwoWay}" Watermark="Select output CSV file" />
       <Button Grid.Row="3" Grid.Column="2" Content="Browse ..." Command="{Binding SaveToFileCommand}" />
     </Grid>
   </DockPanel>

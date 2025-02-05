@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
@@ -39,7 +38,7 @@ public partial class MainWindowViewModel : ViewModelBase
         OnPropertyChanged();
       }
     }
-  } = "<Select input CSV file>";
+  } = string.Empty;
 
   public string OutputFilePath
   {
@@ -54,7 +53,9 @@ public partial class MainWindowViewModel : ViewModelBase
         OnPropertyChanged();
       }
     }
-  } = "<Select output CSV file>";
+  } = string.Empty;
+
+  public DataTable InputDataTable { get; set; } = new ();
 
   private readonly App _parent;
 
@@ -127,8 +128,9 @@ public partial class MainWindowViewModel : ViewModelBase
     using var reader = new StringReader(sb.ToString());
     using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
     using var dr = new CsvDataReader(csv);
-    var dt = new DataTable();
-    dt.Load(dr);
+    InputDataTable.Load(dr);
+    OnPropertyChanged(nameof(InputDataTable));
+    OnPropertyChanged(nameof(InputDataTable.DefaultView));
   }
 
   private async Task DoSaveToFileCommand()
