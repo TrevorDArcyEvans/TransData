@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CsvHelper;
 using ReactiveUI;
 
@@ -25,37 +26,13 @@ public partial class MainWindowViewModel : ViewModelBase
   public ReactiveCommand<Unit, Unit> SaveToDatabaseCommand { get; }
   public ReactiveCommand<Unit, Unit> ExitCommand { get; }
 
-  public string InputFilePath
-  {
-    get;
+  [ObservableProperty]
+  public string _InputFilePath = string.Empty;
 
-    set
-    {
-      var needNotify = field != value;
-      field = value;
-      if (needNotify)
-      {
-        OnPropertyChanged();
-      }
-    }
-  } = string.Empty;
+  [ObservableProperty]
+  public string _OutputFilePath = string.Empty;
 
-  public string OutputFilePath
-  {
-    get;
-
-    set
-    {
-      var needNotify = field != value;
-      field = value;
-      if (needNotify)
-      {
-        OnPropertyChanged();
-      }
-    }
-  } = string.Empty;
-
-  public DataTable InputDataTable { get; set; } = new ();
+  public DataTable InputDataTable { get; set; } = new();
 
   private readonly App _parent;
 
