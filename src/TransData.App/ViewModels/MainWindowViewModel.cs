@@ -28,7 +28,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     OpenFromFileCommand = ReactiveCommand.CreateFromTask(DoOpenFromFileCommand);
     OpenFromDatabaseCommand = ReactiveCommand.Create(() => { Debug.WriteLine("OpenFromDatabaseCommand"); });
-    SaveToFileCommand = ReactiveCommand.Create(() => { Debug.WriteLine("SaveToFileCommand"); });
+    SaveToFileCommand = ReactiveCommand.CreateFromTask(DoSaveToFileCommand);
     SaveToDatabaseCommand = ReactiveCommand.Create(() => { Debug.WriteLine("SaveToDatabaseCommand"); });
 
     ExitCommand = ReactiveCommand.Create(DoExitCommand);
@@ -79,8 +79,34 @@ public partial class MainWindowViewModel : ViewModelBase
     {
       return;
     }
-    
+
     var filePath = files.Single().Path.AbsolutePath;
+  }
+
+  private async Task DoSaveToFileCommand()
+  {
+    var app = (IClassicDesktopStyleApplicationLifetime) _parent.ApplicationLifetime!;
+    var topLevel = TopLevel.GetTopLevel(app.MainWindow);
+
+    // Start async operation to open the dialog.
+    var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+    {
+      Title = "Save CSV File",
+      FileTypeChoices =
+      [
+        new FilePickerFileType("CSV files (*.csv)") {Patterns = ["*.csv"]},
+        new FilePickerFileType("All files (*.*)") {Patterns = ["*.*"]}
+      ],
+      DefaultExtension = ".csv",
+      ShowOverwritePrompt = true
+,    });
+
+    if (file is null)
+    {
+      return;
+    }
+
+    var filePath = file.Path.AbsolutePath;
   }
 
   private void DoExitCommand()
