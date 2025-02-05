@@ -1,11 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
+using CsvHelper;
 using ReactiveUI;
 
 namespace TransData.App.ViewModels;
@@ -81,6 +86,17 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     var filePath = files.Single().Path.AbsolutePath;
+    var topLines = File.ReadAllLines(filePath).Take(20);
+    var sb = new StringBuilder();
+    foreach (var line in topLines)
+    {
+      sb.AppendLine(line);
+    }
+    using var reader = new StringReader(sb.ToString());
+    using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+    using var dr = new CsvDataReader(csv);
+    var dt = new DataTable();
+    dt.Load(dr);
   }
 
   private async Task DoSaveToFileCommand()
