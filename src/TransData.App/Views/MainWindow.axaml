@@ -32,7 +32,9 @@
       </MenuItem>
 
     </Menu>
-    <TextBlock />
+    
+    <TextBox DockPanel.Dock="Top" Text="{Binding InputFilePath, Mode=TwoWay}" />
+    <TextBox DockPanel.Dock="Top" Text="{Binding OutputFilePath, Mode=TwoWay}" />
   </DockPanel>
 
 </Window>

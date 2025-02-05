@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
@@ -24,6 +25,36 @@ public partial class MainWindowViewModel : ViewModelBase
   public ReactiveCommand<Unit, Unit> SaveToFileCommand { get; }
   public ReactiveCommand<Unit, Unit> SaveToDatabaseCommand { get; }
   public ReactiveCommand<Unit, Unit> ExitCommand { get; }
+
+  public string InputFilePath
+  {
+    get;
+
+    set
+    {
+      var needNotify = field != value;
+      field = value;
+      if (needNotify)
+      {
+        OnPropertyChanged();
+      }
+    }
+  } = "<Select input CSV file>";
+
+  public string OutputFilePath
+  {
+    get;
+
+    set
+    {
+      var needNotify = field != value;
+      field = value;
+      if (needNotify)
+      {
+        OnPropertyChanged();
+      }
+    }
+  } = "<Select output CSV file>";
 
   private readonly App _parent;
 
@@ -85,13 +116,14 @@ public partial class MainWindowViewModel : ViewModelBase
       return;
     }
 
-    var filePath = files.Single().Path.AbsolutePath;
-    var topLines = File.ReadAllLines(filePath).Take(20);
+    InputFilePath = files.Single().Path.AbsolutePath;
+    var topLines = File.ReadAllLines(InputFilePath).Take(20);
     var sb = new StringBuilder();
     foreach (var line in topLines)
     {
       sb.AppendLine(line);
     }
+
     using var reader = new StringReader(sb.ToString());
     using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
     using var dr = new CsvDataReader(csv);
@@ -114,15 +146,15 @@ public partial class MainWindowViewModel : ViewModelBase
         new FilePickerFileType("All files (*.*)") {Patterns = ["*.*"]}
       ],
       DefaultExtension = ".csv",
-      ShowOverwritePrompt = true
-,    });
+      ShowOverwritePrompt = true,
+    });
 
     if (file is null)
     {
       return;
     }
 
-    var filePath = file.Path.AbsolutePath;
+    OutputFilePath = file.Path.AbsolutePath;
   }
 
   private void DoExitCommand()
