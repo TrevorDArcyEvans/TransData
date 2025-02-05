@@ -32,9 +32,20 @@
       </MenuItem>
 
     </Menu>
-    
-    <TextBox DockPanel.Dock="Top" Text="{Binding InputFilePath, Mode=TwoWay}" />
-    <TextBox DockPanel.Dock="Top" Text="{Binding OutputFilePath, Mode=TwoWay}" />
+
+    <Grid
+      DockPanel.Dock="Top"
+      ColumnDefinitions="Auto,*,Auto"
+      RowDefinitions="Auto,Auto,*,Auto">
+
+      <TextBlock Grid.Row="0" Grid.Column="0" Text="Input:" />
+      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding InputFilePath, Mode=TwoWay}" />
+      <Button Grid.Row="0" Grid.Column="2" Content="Browse..." Command="{Binding OpenFromFileCommand}"/>
+
+      <TextBox Grid.Row="3" Grid.Column="0" Text="Output:" />
+      <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding OutputFilePath, Mode=TwoWay}" />
+      <Button Grid.Row="3" Grid.Column="2" Content="Browse ..." Command="{Binding SaveToFileCommand}" />
+    </Grid>
   </DockPanel>
 
 </Window>
