@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reactive;
+using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform.Storage;
 using ReactiveUI;
 
 namespace TransData.App.ViewModels;
@@ -22,7 +26,7 @@ public partial class MainWindowViewModel : ViewModelBase
   {
     _parent = parent;
 
-    OpenFromFileCommand = ReactiveCommand.Create(() => { Debug.WriteLine("OpenFromFileCommand"); });
+    OpenFromFileCommand = ReactiveCommand.CreateFromTask(DoOpenFromFileCommand);
     OpenFromDatabaseCommand = ReactiveCommand.Create(() => { Debug.WriteLine("OpenFromDatabaseCommand"); });
     SaveToFileCommand = ReactiveCommand.Create(() => { Debug.WriteLine("SaveToFileCommand"); });
     SaveToDatabaseCommand = ReactiveCommand.Create(() => { Debug.WriteLine("SaveToDatabaseCommand"); });
@@ -36,8 +40,8 @@ public partial class MainWindowViewModel : ViewModelBase
         Header = "_Open",
         Items =
         [
-          new MenuItemViewModel { Header = "From _file...", Command = OpenFromFileCommand },
-          new MenuItemViewModel { Header = "From _database...", Command = OpenFromDatabaseCommand, IsEnabled = false }
+          new MenuItemViewModel {Header = "From _file...", Command = OpenFromFileCommand},
+          new MenuItemViewModel {Header = "From _database...", Command = OpenFromDatabaseCommand, IsEnabled = false}
         ]
       },
       new MenuItemViewModel
@@ -45,13 +49,38 @@ public partial class MainWindowViewModel : ViewModelBase
         Header = "_Save",
         Items =
         [
-          new MenuItemViewModel { Header = "To _file...", Command = SaveToFileCommand },
-          new MenuItemViewModel { Header = "To _database...", Command = SaveToDatabaseCommand, IsEnabled = false }
+          new MenuItemViewModel {Header = "To _file...", Command = SaveToFileCommand},
+          new MenuItemViewModel {Header = "To _database...", Command = SaveToDatabaseCommand, IsEnabled = false}
         ]
       },
-      new MenuItemViewModel { Header = "-" },
-      new MenuItemViewModel { Header = "E_xit", Command = ExitCommand }
+      new MenuItemViewModel {Header = "-"},
+      new MenuItemViewModel {Header = "E_xit", Command = ExitCommand}
     ];
+  }
+
+  private async Task DoOpenFromFileCommand()
+  {
+    var app = (IClassicDesktopStyleApplicationLifetime) _parent.ApplicationLifetime!;
+    var topLevel = TopLevel.GetTopLevel(app.MainWindow);
+
+    // Start async operation to open the dialog.
+    var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+    {
+      Title = "Open CSV File",
+      FileTypeFilter =
+      [
+        new FilePickerFileType("CSV files (*.csv)") {Patterns = ["*.csv"]},
+        new FilePickerFileType("All files (*.*)") {Patterns = ["*.*"]}
+      ],
+      AllowMultiple = false
+    });
+
+    if (!files.Any())
+    {
+      return;
+    }
+    
+    var filePath = files.Single().Path.AbsolutePath;
   }
 
   private void DoExitCommand()
