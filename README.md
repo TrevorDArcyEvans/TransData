@@ -55,6 +55,14 @@ dotnet run
 * upload to database
 
 
+## Further information
+* [awesome-etl](https://github.com/pawl/awesome-etl?tab=readme-ov-file)
+* [Etl.Net](https://github.com/paillave/Etl.Net)
+* [ChoETL](https://github.com/Cinchoo/ChoETL)
+* [etlbox](https://github.com/rpsft/etlbox)
+* [EtlLib](https://github.com/cylewitruk/EtlLib)
+
+
 ## Acknowledgements
 * icon from [OPENCLIPART](https://openclipart.org/)
   * [transpose](https://openclipart.org/detail/305559/transpose-pivottable-rotate-statistics)
