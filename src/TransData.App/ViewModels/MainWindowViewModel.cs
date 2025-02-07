@@ -13,6 +13,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CsvHelper;
+using CsvHelper.Configuration;
 using ReactiveUI;
 
 namespace TransData.App.ViewModels;
@@ -137,7 +138,8 @@ public partial class MainWindowViewModel : ViewModelBase
       HeaderValidated = null,
       MissingFieldFound = null,
       IgnoreBlankLines = false,
-      BadDataFound = null
+      BadDataFound = null,
+      TrimOptions = TrimOptions.Trim | TrimOptions.InsideQuotes
     };
     using var reader = new StringReader(sb.ToString());
     using var csv = new CsvReader(reader, config);
