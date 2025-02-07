@@ -45,11 +45,7 @@
       <DataGrid
         Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
         Name="InputDataTable"
-        Margin="20"
-        AutoGenerateColumns="False"
-        IsReadOnly="True"
-        IsVisible="True"
-        GridLinesVisibility="All">
+        AutoGenerateColumns="False">
       </DataGrid>
 
       <TextBlock Grid.Row="3" Grid.Column="0" Text="Output:" />

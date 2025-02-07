@@ -13,5 +13,12 @@
   <Application.Styles>
     <FluentTheme />
     <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+
+    <Style Selector="DataGrid">
+      <Setter Property="Margin" Value="20" />
+      <Setter Property="GridLinesVisibility" Value="All" />
+      <Setter Property="IsVisible" Value="True" />
+      <Setter Property="IsReadOnly" Value="True" />
+    </Style>
   </Application.Styles>
 </Application>
