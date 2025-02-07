@@ -54,8 +54,8 @@ public partial class MainWindowViewModel : ViewModelBase
         Header = "_Open",
         Items =
         [
-          new MenuItemViewModel {Header = "From _file...", Command = OpenFromFileCommand},
-          new MenuItemViewModel {Header = "From _database...", Command = OpenFromDatabaseCommand, IsEnabled = false}
+          new MenuItemViewModel { Header = "From _file...", Command = OpenFromFileCommand },
+          new MenuItemViewModel { Header = "From _database...", Command = OpenFromDatabaseCommand, IsEnabled = false }
         ]
       },
       new MenuItemViewModel
@@ -63,18 +63,18 @@ public partial class MainWindowViewModel : ViewModelBase
         Header = "_Save",
         Items =
         [
-          new MenuItemViewModel {Header = "To _file...", Command = SaveToFileCommand},
-          new MenuItemViewModel {Header = "To _database...", Command = SaveToDatabaseCommand, IsEnabled = false}
+          new MenuItemViewModel { Header = "To _file...", Command = SaveToFileCommand },
+          new MenuItemViewModel { Header = "To _database...", Command = SaveToDatabaseCommand, IsEnabled = false }
         ]
       },
-      new MenuItemViewModel {Header = "-"},
-      new MenuItemViewModel {Header = "E_xit", Command = ExitCommand}
+      new MenuItemViewModel { Header = "-" },
+      new MenuItemViewModel { Header = "E_xit", Command = ExitCommand }
     ];
   }
 
   private async Task DoOpenFromFileCommand()
   {
-    var app = (IClassicDesktopStyleApplicationLifetime) _parent.ApplicationLifetime!;
+    var app = (IClassicDesktopStyleApplicationLifetime)_parent.ApplicationLifetime!;
     var topLevel = TopLevel.GetTopLevel(app.MainWindow);
 
     // Start async operation to open the dialog.
@@ -83,8 +83,8 @@ public partial class MainWindowViewModel : ViewModelBase
       Title = "Open CSV File",
       FileTypeFilter =
       [
-        new FilePickerFileType("CSV files (*.csv)") {Patterns = ["*.csv"]},
-        new FilePickerFileType("All files (*.*)") {Patterns = ["*.*"]}
+        new FilePickerFileType("CSV files (*.csv)") { Patterns = ["*.csv"] },
+        new FilePickerFileType("All files (*.*)") { Patterns = ["*.*"] }
       ],
       AllowMultiple = false
     });
@@ -102,8 +102,16 @@ public partial class MainWindowViewModel : ViewModelBase
       sb.AppendLine(line);
     }
 
+    var config = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
+    {
+      HasHeaderRecord = true,
+      HeaderValidated = null,
+      MissingFieldFound = null,
+      IgnoreBlankLines = false,
+      BadDataFound = null
+    };
     using var reader = new StringReader(sb.ToString());
-    using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+    using var csv = new CsvReader(reader, config);
     using var dr = new CsvDataReader(csv);
     InputDataTable.Load(dr);
     OnPropertyChanged(nameof(InputDataTable));
@@ -112,7 +120,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
   private async Task DoSaveToFileCommand()
   {
-    var app = (IClassicDesktopStyleApplicationLifetime) _parent.ApplicationLifetime!;
+    var app = (IClassicDesktopStyleApplicationLifetime)_parent.ApplicationLifetime!;
     var topLevel = TopLevel.GetTopLevel(app.MainWindow);
 
     // Start async operation to open the dialog.
@@ -121,8 +129,8 @@ public partial class MainWindowViewModel : ViewModelBase
       Title = "Save CSV File",
       FileTypeChoices =
       [
-        new FilePickerFileType("CSV files (*.csv)") {Patterns = ["*.csv"]},
-        new FilePickerFileType("All files (*.*)") {Patterns = ["*.*"]}
+        new FilePickerFileType("CSV files (*.csv)") { Patterns = ["*.csv"] },
+        new FilePickerFileType("All files (*.*)") { Patterns = ["*.*"] }
       ],
       DefaultExtension = ".csv",
       ShowOverwritePrompt = true,
