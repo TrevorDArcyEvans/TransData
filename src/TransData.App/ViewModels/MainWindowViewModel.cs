@@ -116,7 +116,7 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     // will fire property changed
-    InputFilePath = files.Single().Path.AbsolutePath;
+    InputFilePath = files.Single().Path.LocalPath;
   }
 
   private void LoadInputFile()
@@ -124,7 +124,7 @@ public partial class MainWindowViewModel : ViewModelBase
     // cannot reuse because DefaultView does not get updated
     InputDataTable = new();
     
-    var topLines = File.ReadAllLines(InputFilePath).Take(20);
+    var topLines = File.ReadAllLines(InputFilePath).Take(200);
     var sb = new StringBuilder();
     foreach (var line in topLines)
     {
