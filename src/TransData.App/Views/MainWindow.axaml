@@ -44,7 +44,7 @@
 
       <DataGrid
         Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
-        Name="InputDataTable"
+        Name="InputDataGrid"
         AutoGenerateColumns="False">
       </DataGrid>
 
