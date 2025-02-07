@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
@@ -54,8 +55,8 @@ public partial class MainWindowViewModel : ViewModelBase
         Header = "_Open",
         Items =
         [
-          new MenuItemViewModel { Header = "From _file...", Command = OpenFromFileCommand },
-          new MenuItemViewModel { Header = "From _database...", Command = OpenFromDatabaseCommand, IsEnabled = false }
+          new MenuItemViewModel {Header = "From _file...", Command = OpenFromFileCommand},
+          new MenuItemViewModel {Header = "From _database...", Command = OpenFromDatabaseCommand, IsEnabled = false}
         ]
       },
       new MenuItemViewModel
@@ -63,18 +64,38 @@ public partial class MainWindowViewModel : ViewModelBase
         Header = "_Save",
         Items =
         [
-          new MenuItemViewModel { Header = "To _file...", Command = SaveToFileCommand },
-          new MenuItemViewModel { Header = "To _database...", Command = SaveToDatabaseCommand, IsEnabled = false }
+          new MenuItemViewModel {Header = "To _file...", Command = SaveToFileCommand},
+          new MenuItemViewModel {Header = "To _database...", Command = SaveToDatabaseCommand, IsEnabled = false}
         ]
       },
-      new MenuItemViewModel { Header = "-" },
-      new MenuItemViewModel { Header = "E_xit", Command = ExitCommand }
+      new MenuItemViewModel {Header = "-"},
+      new MenuItemViewModel {Header = "E_xit", Command = ExitCommand}
     ];
+
+    PropertyChanged += OnPropertyChanged;
+  }
+
+  private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+  {
+    switch (e.PropertyName)
+    {
+      case nameof(InputFilePath):
+        if (File.Exists(InputFilePath))
+        {
+          LoadInputFile();
+        }
+        else
+        {
+          ClearInputDataTable();
+        }
+
+        break;
+    }
   }
 
   private async Task DoOpenFromFileCommand()
   {
-    var app = (IClassicDesktopStyleApplicationLifetime)_parent.ApplicationLifetime!;
+    var app = (IClassicDesktopStyleApplicationLifetime) _parent.ApplicationLifetime!;
     var topLevel = TopLevel.GetTopLevel(app.MainWindow);
 
     // Start async operation to open the dialog.
@@ -83,8 +104,8 @@ public partial class MainWindowViewModel : ViewModelBase
       Title = "Open CSV File",
       FileTypeFilter =
       [
-        new FilePickerFileType("CSV files (*.csv)") { Patterns = ["*.csv"] },
-        new FilePickerFileType("All files (*.*)") { Patterns = ["*.*"] }
+        new FilePickerFileType("CSV files (*.csv)") {Patterns = ["*.csv"]},
+        new FilePickerFileType("All files (*.*)") {Patterns = ["*.*"]}
       ],
       AllowMultiple = false
     });
@@ -94,7 +115,15 @@ public partial class MainWindowViewModel : ViewModelBase
       return;
     }
 
+    // will fire property changed
     InputFilePath = files.Single().Path.AbsolutePath;
+  }
+
+  private void LoadInputFile()
+  {
+    // cannot reuse because DefaultView does not get updated
+    InputDataTable = new();
+    
     var topLines = File.ReadAllLines(InputFilePath).Take(20);
     var sb = new StringBuilder();
     foreach (var line in topLines)
@@ -114,13 +143,20 @@ public partial class MainWindowViewModel : ViewModelBase
     using var csv = new CsvReader(reader, config);
     using var dr = new CsvDataReader(csv);
     InputDataTable.Load(dr);
+    
     OnPropertyChanged(nameof(InputDataTable));
-    OnPropertyChanged(nameof(InputDataTable.DefaultView));
+  }
+
+  private void ClearInputDataTable()
+  {
+    InputDataTable.Reset();
+    
+    OnPropertyChanged(nameof(InputDataTable));
   }
 
   private async Task DoSaveToFileCommand()
   {
-    var app = (IClassicDesktopStyleApplicationLifetime)_parent.ApplicationLifetime!;
+    var app = (IClassicDesktopStyleApplicationLifetime) _parent.ApplicationLifetime!;
     var topLevel = TopLevel.GetTopLevel(app.MainWindow);
 
     // Start async operation to open the dialog.
@@ -129,8 +165,8 @@ public partial class MainWindowViewModel : ViewModelBase
       Title = "Save CSV File",
       FileTypeChoices =
       [
-        new FilePickerFileType("CSV files (*.csv)") { Patterns = ["*.csv"] },
-        new FilePickerFileType("All files (*.*)") { Patterns = ["*.*"] }
+        new FilePickerFileType("CSV files (*.csv)") {Patterns = ["*.csv"]},
+        new FilePickerFileType("All files (*.*)") {Patterns = ["*.*"]}
       ],
       DefaultExtension = ".csv",
       ShowOverwritePrompt = true,
