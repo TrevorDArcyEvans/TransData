@@ -54,7 +54,21 @@
       </TabItem>
 
       <TabItem Header="Column Actions">
-        <TextBlock Margin="5">TODO</TextBlock>
+        <Grid
+          ColumnDefinitions="Auto,Auto"
+          RowDefinitions="Auto,Auto">
+
+          <ComboBox Grid.Row="0" Grid.Column="0"
+                    Name="SelectedColumn"
+                    SelectedValue="{Binding SelectedColumn}"
+                    ItemsSource="{Binding InputDataTable.Columns}">
+          </ComboBox>
+
+          <DataGrid Grid.Row="1" Grid.Column="0"
+                    Name="FilteredInputDataGrid"
+                    AutoGenerateColumns="False">
+          </DataGrid>
+        </Grid>
       </TabItem>
 
       <TabItem Header="Output">

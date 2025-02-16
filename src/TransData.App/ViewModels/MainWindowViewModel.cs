@@ -34,6 +34,9 @@ public partial class MainWindowViewModel : ViewModelBase
   [ObservableProperty]
   public string _OutputFilePath = string.Empty;
 
+  [ObservableProperty]
+  public DataColumn _SelectedColumn = new ();
+
   public DataTable InputDataTable { get; set; } = new();
 
   private readonly App _parent;
