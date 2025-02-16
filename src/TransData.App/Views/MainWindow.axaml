@@ -33,25 +33,48 @@
 
     </Menu>
 
-    <Grid
-      DockPanel.Dock="Top"
-      ColumnDefinitions="Auto,*,Auto"
-      RowDefinitions="Auto,Auto,*,Auto">
+    <TabControl
+      Margin="5"
+      DockPanel.Dock="Top">
+      <TabItem Header="Input">
+        <Grid
+          ColumnDefinitions="Auto,*,Auto"
+          RowDefinitions="Auto,Auto">
 
-      <TextBlock Grid.Row="0" Grid.Column="0" Text="Input:" />
-      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding InputFilePath, Mode=TwoWay}" Watermark="Select input CSV file" />
-      <Button Grid.Row="0" Grid.Column="2" Content="Browse..." Command="{Binding OpenFromFileCommand}" />
+          <TextBlock Grid.Row="0" Grid.Column="0" Text="Input:" />
+          <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding InputFilePath, Mode=TwoWay}"
+                   Watermark="Select input CSV file" />
+          <Button Grid.Row="0" Grid.Column="2" Content="Browse..." Command="{Binding OpenFromFileCommand}" />
 
-      <DataGrid
-        Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
-        Name="InputDataGrid"
-        AutoGenerateColumns="False">
-      </DataGrid>
+          <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                    Name="InputDataGrid"
+                    AutoGenerateColumns="False">
+          </DataGrid>
+        </Grid>
+      </TabItem>
 
-      <TextBlock Grid.Row="3" Grid.Column="0" Text="Output:" />
-      <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding OutputFilePath, Mode=TwoWay}" Watermark="Select output CSV file" />
-      <Button Grid.Row="3" Grid.Column="2" Content="Browse ..." Command="{Binding SaveToFileCommand}" />
-    </Grid>
+      <TabItem Header="Column Actions">
+        <TextBlock Margin="5">TODO</TextBlock>
+      </TabItem>
+
+      <TabItem Header="Output">
+        <Grid
+          DockPanel.Dock="Top"
+          ColumnDefinitions="Auto,*,Auto"
+          RowDefinitions="Auto">
+
+          <TextBlock Grid.Row="0" Grid.Column="0" Text="Output:" />
+          <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding OutputFilePath, Mode=TwoWay}"
+                   Watermark="Select output CSV file" />
+          <Button Grid.Row="0" Grid.Column="2" Content="Browse ..." Command="{Binding SaveToFileCommand}" />
+        </Grid>
+      </TabItem>
+
+      <TabItem Header="Execute">
+        <TextBlock Margin="5">TODO</TextBlock>
+      </TabItem>
+    </TabControl>
+
   </DockPanel>
 
 </Window>
