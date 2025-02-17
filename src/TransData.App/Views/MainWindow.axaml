@@ -55,7 +55,7 @@
       <TabItem Header="Column Actions">
         <Grid
           ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,*"
-          RowDefinitions="Auto,Auto,Auto,*">
+          RowDefinitions="Auto,Auto,Auto,Auto,Auto,*">
 
           <ComboBox
             Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
@@ -64,11 +64,11 @@
             ItemsSource="{Binding InputDataTable.Columns}" />
 
           <DataGrid
-            Grid.Row="1" Grid.Column="0" Grid.RowSpan="3"
+            Grid.Row="1" Grid.Column="0" Grid.RowSpan="5"
             Name="FilteredInputDataGrid"
             AutoGenerateColumns="False" />
           <DataGrid
-            Grid.Row="1" Grid.Column="1" Grid.RowSpan="3"
+            Grid.Row="1" Grid.Column="1" Grid.RowSpan="5"
             Name="TransformedInputDataGrid"
             AutoGenerateColumns="False" />
 
@@ -76,28 +76,36 @@
             Grid.Row="0" Grid.Column="2"
             Text="Available Column Actions" />
           <ListBox
-            Grid.Row="1" Grid.Column="2" Grid.RowSpan="3"
+            Grid.Row="1" Grid.Column="2" Grid.RowSpan="5"
             ItemsSource="{Binding AvailableColumnActions}"
-            SelectedItem="{Binding SelectedColumnAction}" />
+            SelectedItem="{Binding SelectedAvailableColumnAction}" />
 
           <Button
-            Grid.Row="1" Grid.Column="3" Content="-->" />
+            Grid.Row="1" Grid.Column="3" Content="&#x2190;" FontSize="36"
+            Command="{Binding RemoveColumnActionCommand}" />
           <Button
-            Grid.Row="2" Grid.Column="3" Content="--" />
+            Grid.Row="2" Grid.Column="3" Content="&#x2192;" FontSize="36"
+            Command="{Binding AddColumnActionCommand}" />
+          <Button
+            Grid.Row="3" Grid.Column="3" Content="&#x2191;" FontSize="36"
+            Command="{Binding MoveUpColumnActionCommand}" />
+          <Button
+            Grid.Row="4" Grid.Column="3" Content="&#x2193;" FontSize="36"
+            Command="{Binding MoveDownColumnActionCommand}" />
 
           <TextBlock
             Grid.Row="0" Grid.Column="4"
-            Text="Selected Column Actions" />
+            Text="Active Column Actions" />
           <ListBox
-            Grid.Row="1" Grid.Column="4" Grid.RowSpan="3"
-            ItemsSource="{Binding AvailableColumnActions}"
-            SelectedItem="{Binding SelectedColumnAction}" />
+            Grid.Row="1" Grid.Column="4" Grid.RowSpan="5"
+            ItemsSource="{Binding ActiveColumnActions}"
+            SelectedItem="{Binding SelectedActiveColumnAction}" />
 
           <TextBlock
             Grid.Row="0" Grid.Column="5"
             Text="Active Column Action Configuration" />
           <TextBox
-            Grid.Row="1" Grid.Column="5" Grid.RowSpan="3"
+            Grid.Row="1" Grid.Column="5" Grid.RowSpan="5"
             AcceptsReturn="True" TextWrapping="Wrap" />
         </Grid>
       </TabItem>

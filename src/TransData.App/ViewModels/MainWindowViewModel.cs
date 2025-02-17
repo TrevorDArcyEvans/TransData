@@ -28,6 +28,10 @@ public partial class MainWindowViewModel : ViewModelBase
   public ReactiveCommand<Unit, Unit> SaveToFileCommand { get; }
   public ReactiveCommand<Unit, Unit> SaveToDatabaseCommand { get; }
   public ReactiveCommand<Unit, Unit> ExitCommand { get; }
+  public ReactiveCommand<Unit, Unit> AddColumnActionCommand { get; }
+  public ReactiveCommand<Unit, Unit> RemoveColumnActionCommand { get; }
+  public ReactiveCommand<Unit, Unit> MoveUpColumnActionCommand { get; }
+  public ReactiveCommand<Unit, Unit> MoveDownColumnActionCommand { get; }
 
   [ObservableProperty]
   public string _InputFilePath = string.Empty;
@@ -36,14 +40,19 @@ public partial class MainWindowViewModel : ViewModelBase
   public string _OutputFilePath = string.Empty;
 
   [ObservableProperty]
-  public DataColumn _SelectedColumn = new ();
+  public DataColumn _SelectedColumn = new();
 
   public DataTable InputDataTable { get; set; } = new();
-  
-  public ObservableCollection<string>  AvailableColumnActions { get; set; } = ["aaa", "bbb", "ccc", "ddd", "eee"];
+
+  public ObservableCollection<string> AvailableColumnActions { get; set; } = ["aaa", "bbb", "ccc", "ddd", "eee"];
 
   [ObservableProperty]
-  public string _SelectedColumnAction = string.Empty;
+  public string _SelectedAvailableColumnAction = string.Empty;
+
+  public ObservableCollection<string> ActiveColumnActions { get; set; } = ["fff", "ggg", "hhh", "iii", "jjj"];
+
+  [ObservableProperty]
+  public string _SelectedActiveColumnAction = string.Empty;
 
   private readonly App _parent;
 
@@ -57,6 +66,11 @@ public partial class MainWindowViewModel : ViewModelBase
     SaveToDatabaseCommand = ReactiveCommand.Create(() => { Debug.WriteLine("SaveToDatabaseCommand"); });
 
     ExitCommand = ReactiveCommand.Create(DoExitCommand);
+
+    AddColumnActionCommand = ReactiveCommand.Create(() => { Debug.WriteLine("AddColumnActionCommand"); });
+    RemoveColumnActionCommand = ReactiveCommand.Create(() => { Debug.WriteLine("RemoveColumnActionCommand"); });
+    MoveUpColumnActionCommand = ReactiveCommand.Create(() => { Debug.WriteLine("MoveUpColumnActionCommand"); });
+    MoveDownColumnActionCommand = ReactiveCommand.Create(() => { Debug.WriteLine("MoveDownColumnActionCommand"); });
 
     FileMenuItems =
     [
@@ -133,7 +147,7 @@ public partial class MainWindowViewModel : ViewModelBase
   {
     // cannot reuse because DefaultView does not get updated
     InputDataTable = new();
-    
+
     var topLines = File.ReadAllLines(InputFilePath).Take(200);
     var sb = new StringBuilder();
     foreach (var line in topLines)
@@ -154,14 +168,14 @@ public partial class MainWindowViewModel : ViewModelBase
     using var csv = new CsvReader(reader, config);
     using var dr = new CsvDataReader(csv);
     InputDataTable.Load(dr);
-    
+
     OnPropertyChanged(nameof(InputDataTable));
   }
 
   private void ClearInputDataTable()
   {
     InputDataTable.Reset();
-    
+
     OnPropertyChanged(nameof(InputDataTable));
   }
 
