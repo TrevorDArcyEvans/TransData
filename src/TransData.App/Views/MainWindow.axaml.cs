@@ -26,10 +26,7 @@ public partial class MainWindow : Window
       case nameof(vm.InputDataTable):
       {
         // clear out any existing columns
-        while (InputDataGrid.Columns.Count > 0)
-        {
-          InputDataGrid.Columns.RemoveAt(InputDataGrid.Columns.Count - 1);
-        }
+        InputDataGrid.Columns.Clear();
 
         // assign the datatable to the grid
         InputDataGrid.ItemsSource = vm.InputDataTable.DefaultView;
@@ -50,10 +47,7 @@ public partial class MainWindow : Window
       case nameof(vm.SelectedColumn):
       {
         // clear out any existing columns
-        while (FilteredInputDataGrid.Columns.Count > 0)
-        {
-          FilteredInputDataGrid.Columns.RemoveAt(FilteredInputDataGrid.Columns.Count - 1);
-        }
+        FilteredInputDataGrid.Columns.Clear();
 
         // assign the datatable to the grid
         FilteredInputDataGrid.ItemsSource = vm.InputDataTable.DefaultView;
