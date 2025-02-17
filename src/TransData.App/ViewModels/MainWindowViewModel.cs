@@ -23,7 +23,6 @@ public partial class MainWindowViewModel : ViewModelBase
 {
   public ReactiveCommand<Unit, Unit> OpenFromFileCommand { get; }
   public ReactiveCommand<Unit, Unit> SaveToFileCommand { get; }
-  public ReactiveCommand<Unit, Unit> ExitCommand { get; }
   public ReactiveCommand<Unit, Unit> AddColumnActionCommand { get; }
   public ReactiveCommand<Unit, Unit> RemoveColumnActionCommand { get; }
   public ReactiveCommand<Unit, Unit> MoveUpColumnActionCommand { get; }
@@ -58,8 +57,6 @@ public partial class MainWindowViewModel : ViewModelBase
 
     OpenFromFileCommand = ReactiveCommand.CreateFromTask(DoOpenFromFileCommand);
     SaveToFileCommand = ReactiveCommand.CreateFromTask(DoSaveToFileCommand);
-
-    ExitCommand = ReactiveCommand.Create(DoExitCommand);
 
     AddColumnActionCommand = ReactiveCommand.Create(() => { Debug.WriteLine("AddColumnActionCommand"); });
     RemoveColumnActionCommand = ReactiveCommand.Create(() => { Debug.WriteLine("RemoveColumnActionCommand"); });
@@ -173,13 +170,5 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     OutputFilePath = file.Path.AbsolutePath;
-  }
-
-  private void DoExitCommand()
-  {
-    if (_parent.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime app)
-    {
-      app.Shutdown();
-    }
   }
 }
