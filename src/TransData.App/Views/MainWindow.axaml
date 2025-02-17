@@ -17,21 +17,6 @@
   </Design.DataContext>
 
   <DockPanel>
-    <Menu DockPanel.Dock="Top">
-
-      <MenuItem Header="File" ItemsSource="{Binding FileMenuItems}" Classes="SubItems">
-        <MenuItem.Styles>
-          <Style Selector="MenuItem.SubItems MenuItem" x:DataType="vm:MenuItemViewModel">
-            <Setter Property="Header" Value="{Binding Header}" />
-            <Setter Property="Command" Value="{Binding Command}" />
-            <Setter Property="CommandParameter" Value="{Binding CommandParameter}" />
-            <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
-            <Setter Property="ItemsSource" Value="{Binding Items}" />
-          </Style>
-        </MenuItem.Styles>
-      </MenuItem>
-
-    </Menu>
 
     <TabControl
       Margin="5"

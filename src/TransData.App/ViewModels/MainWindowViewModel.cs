@@ -21,12 +21,8 @@ namespace TransData.App.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-  public IReadOnlyList<MenuItemViewModel> FileMenuItems { get; set; }
-
   public ReactiveCommand<Unit, Unit> OpenFromFileCommand { get; }
-  public ReactiveCommand<Unit, Unit> OpenFromDatabaseCommand { get; }
   public ReactiveCommand<Unit, Unit> SaveToFileCommand { get; }
-  public ReactiveCommand<Unit, Unit> SaveToDatabaseCommand { get; }
   public ReactiveCommand<Unit, Unit> ExitCommand { get; }
   public ReactiveCommand<Unit, Unit> AddColumnActionCommand { get; }
   public ReactiveCommand<Unit, Unit> RemoveColumnActionCommand { get; }
@@ -61,9 +57,7 @@ public partial class MainWindowViewModel : ViewModelBase
     _parent = parent;
 
     OpenFromFileCommand = ReactiveCommand.CreateFromTask(DoOpenFromFileCommand);
-    OpenFromDatabaseCommand = ReactiveCommand.Create(() => { Debug.WriteLine("OpenFromDatabaseCommand"); });
     SaveToFileCommand = ReactiveCommand.CreateFromTask(DoSaveToFileCommand);
-    SaveToDatabaseCommand = ReactiveCommand.Create(() => { Debug.WriteLine("SaveToDatabaseCommand"); });
 
     ExitCommand = ReactiveCommand.Create(DoExitCommand);
 
@@ -71,30 +65,6 @@ public partial class MainWindowViewModel : ViewModelBase
     RemoveColumnActionCommand = ReactiveCommand.Create(() => { Debug.WriteLine("RemoveColumnActionCommand"); });
     MoveUpColumnActionCommand = ReactiveCommand.Create(() => { Debug.WriteLine("MoveUpColumnActionCommand"); });
     MoveDownColumnActionCommand = ReactiveCommand.Create(() => { Debug.WriteLine("MoveDownColumnActionCommand"); });
-
-    FileMenuItems =
-    [
-      new MenuItemViewModel
-      {
-        Header = "_Open",
-        Items =
-        [
-          new MenuItemViewModel {Header = "From _file...", Command = OpenFromFileCommand},
-          new MenuItemViewModel {Header = "From _database...", Command = OpenFromDatabaseCommand, IsEnabled = false}
-        ]
-      },
-      new MenuItemViewModel
-      {
-        Header = "_Save",
-        Items =
-        [
-          new MenuItemViewModel {Header = "To _file...", Command = SaveToFileCommand},
-          new MenuItemViewModel {Header = "To _database...", Command = SaveToDatabaseCommand, IsEnabled = false}
-        ]
-      },
-      new MenuItemViewModel {Header = "-"},
-      new MenuItemViewModel {Header = "E_xit", Command = ExitCommand}
-    ];
 
     PropertyChanged += OnPropertyChanged;
   }
@@ -155,7 +125,7 @@ public partial class MainWindowViewModel : ViewModelBase
       sb.AppendLine(line);
     }
 
-    var config = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
+    var config = new CsvConfiguration(CultureInfo.InvariantCulture)
     {
       HasHeaderRecord = true,
       HeaderValidated = null,
