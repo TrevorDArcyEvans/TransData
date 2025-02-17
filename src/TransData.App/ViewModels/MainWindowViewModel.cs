@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -38,6 +39,11 @@ public partial class MainWindowViewModel : ViewModelBase
   public DataColumn _SelectedColumn = new ();
 
   public DataTable InputDataTable { get; set; } = new();
+  
+  public ObservableCollection<string>  AvailableColumnActions { get; set; } = ["aaa", "bbb", "ccc", "ddd", "eee"];
+
+  [ObservableProperty]
+  public string _SelectedColumnAction = string.Empty;
 
   private readonly App _parent;
 
