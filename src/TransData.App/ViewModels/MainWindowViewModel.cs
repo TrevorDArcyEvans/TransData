@@ -37,6 +37,7 @@ public partial class MainWindowViewModel : ViewModelBase
   public DataColumn _SelectedColumn = new();
 
   public DataTable InputDataTable { get; set; } = new();
+  public DataTable TransformedInputDataTable { get; set; } = new();
 
   public ObservableCollection<string> AvailableColumnActions { get; set; } = ["aaa", "bbb", "ccc", "ddd", "eee"];
 
@@ -148,6 +149,7 @@ public partial class MainWindowViewModel : ViewModelBase
     using var csv = new CsvReader(reader, config);
     using var dr = new CsvDataReader(csv);
     InputDataTable.Load(dr);
+    TransformedInputDataTable = InputDataTable.Copy();
 
     OnPropertyChanged(nameof(InputDataTable));
   }
