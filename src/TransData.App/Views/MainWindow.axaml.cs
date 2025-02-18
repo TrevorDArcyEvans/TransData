@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Text;
 using Avalonia.Controls;
 using ReactiveUI;
 using TransData.App.ViewModels;
@@ -20,7 +21,7 @@ public partial class MainWindow : Window
 
   private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
   {
-    var vm = (MainWindowViewModel) DataContext!;
+    var vm = (MainWindowViewModel)DataContext!;
     switch (e.PropertyName)
     {
       case nameof(vm.InputDataTable):
@@ -57,14 +58,20 @@ public partial class MainWindow : Window
           break;
         }
 
-        DataGridBoundColumn gridCol = vm.SelectedColumn.DataType == typeof(bool) ? new DataGridCheckBoxColumn() : new DataGridTextColumn();
-
-        gridCol.Header = vm.SelectedColumn.ColumnName;
-        gridCol.Binding = new Avalonia.Data.Binding($"Row.ItemArray[{vm.SelectedColumn.Ordinal}]");
-        FilteredInputDataGrid.Columns.Add(gridCol);
+        FilteredInputDataGrid.Columns.Add(GetDataGridBoundColumn(vm));
+        FilteredInputDataGrid.Columns.Add(GetDataGridBoundColumn(vm, " [Tx]"));
 
         break;
       }
     }
+  }
+
+  private static DataGridBoundColumn GetDataGridBoundColumn(MainWindowViewModel vm, string suffix = null)
+  {
+    DataGridBoundColumn gridCol = vm.SelectedColumn.DataType == typeof(bool) ? new DataGridCheckBoxColumn() : new DataGridTextColumn();
+
+    gridCol.Header = vm.SelectedColumn.ColumnName + suffix;
+    gridCol.Binding = new Avalonia.Data.Binding($"Row.ItemArray[{vm.SelectedColumn.Ordinal}]");
+    return gridCol;
   }
 }

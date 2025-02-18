@@ -52,10 +52,6 @@
             Grid.Row="1" Grid.Column="0" Grid.RowSpan="5"
             Name="FilteredInputDataGrid"
             AutoGenerateColumns="False" />
-          <DataGrid
-            Grid.Row="1" Grid.Column="1" Grid.RowSpan="5"
-            Name="TransformedInputDataGrid"
-            AutoGenerateColumns="False" />
 
           <TextBlock
             Grid.Row="0" Grid.Column="2"
