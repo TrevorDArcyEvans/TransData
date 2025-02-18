@@ -63,6 +63,12 @@ public partial class MainWindow : Window
 
         break;
       }
+
+      case nameof(vm.ActiveColumnActions):
+      {
+        Debug.WriteLine(nameof(vm.ActiveColumnActions));
+        break;
+      }
     }
   }
 

@@ -188,23 +188,27 @@ public partial class MainWindowViewModel : ViewModelBase
   private void DoAddColumnActionCommand()
   {
     ActiveColumnActions.Add(SelectedAvailableColumnAction);
+    OnPropertyChanged(nameof(ActiveColumnActions));
   }
 
   private void DoRemoveColumnActionCommand()
   {
     ActiveColumnActions.Remove(SelectedActiveColumnAction);
+    OnPropertyChanged(nameof(ActiveColumnActions));
   }
 
   private void DoMoveUpColumnActionCommand()
   {
     var idx = ActiveColumnActions.IndexOf(SelectedActiveColumnAction);
     Swap(ActiveColumnActions, idx, idx - 1);
+    OnPropertyChanged(nameof(ActiveColumnActions));
   }
 
   private void DoMoveDownColumnActionCommand()
   {
     var idx = ActiveColumnActions.IndexOf(SelectedActiveColumnAction);
     Swap(ActiveColumnActions, idx, idx + 1);
+    OnPropertyChanged(nameof(ActiveColumnActions));
   }
 
   private static void Swap<T>(IList<T> list, int indexA, int indexB)
