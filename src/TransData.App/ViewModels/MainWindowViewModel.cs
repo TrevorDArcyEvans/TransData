@@ -58,10 +58,10 @@ public partial class MainWindowViewModel : ViewModelBase
     OpenFromFileCommand = ReactiveCommand.CreateFromTask(DoOpenFromFileCommand);
     SaveToFileCommand = ReactiveCommand.CreateFromTask(DoSaveToFileCommand);
 
-    AddColumnActionCommand = ReactiveCommand.Create(() => { Debug.WriteLine("AddColumnActionCommand"); });
-    RemoveColumnActionCommand = ReactiveCommand.Create(() => { Debug.WriteLine("RemoveColumnActionCommand"); });
-    MoveUpColumnActionCommand = ReactiveCommand.Create(() => { Debug.WriteLine("MoveUpColumnActionCommand"); });
-    MoveDownColumnActionCommand = ReactiveCommand.Create(() => { Debug.WriteLine("MoveDownColumnActionCommand"); });
+    AddColumnActionCommand = ReactiveCommand.Create(DoAddColumnActionCommand);
+    RemoveColumnActionCommand = ReactiveCommand.Create(DoRemoveColumnActionCommand);
+    MoveUpColumnActionCommand = ReactiveCommand.Create(DoMoveUpColumnActionCommand);
+    MoveDownColumnActionCommand = ReactiveCommand.Create(DoMoveDownColumnActionCommand);
 
     PropertyChanged += OnPropertyChanged;
   }
@@ -170,5 +170,32 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     OutputFilePath = file.Path.AbsolutePath;
+  }
+
+  private void DoAddColumnActionCommand()
+  {
+    ActiveColumnActions.Add(SelectedAvailableColumnAction);
+  }
+
+  private void DoRemoveColumnActionCommand()
+  {
+    ActiveColumnActions.Remove(SelectedActiveColumnAction);
+  }
+
+  private void DoMoveUpColumnActionCommand()
+  {
+    var idx = ActiveColumnActions.IndexOf(SelectedActiveColumnAction);
+    Swap(ActiveColumnActions, idx, idx - 1);
+  }
+
+  private void DoMoveDownColumnActionCommand()
+  {
+    var idx = ActiveColumnActions.IndexOf(SelectedActiveColumnAction);
+    Swap(ActiveColumnActions, idx, idx + 1);
+  }
+
+  private static void Swap<T>(IList<T> list, int indexA, int indexB)
+  {
+    (list[indexA], list[indexB]) = (list[indexB], list[indexA]);
   }
 }
