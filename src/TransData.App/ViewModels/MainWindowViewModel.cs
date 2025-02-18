@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
@@ -58,10 +59,24 @@ public partial class MainWindowViewModel : ViewModelBase
     OpenFromFileCommand = ReactiveCommand.CreateFromTask(DoOpenFromFileCommand);
     SaveToFileCommand = ReactiveCommand.CreateFromTask(DoSaveToFileCommand);
 
-    AddColumnActionCommand = ReactiveCommand.Create(DoAddColumnActionCommand);
-    RemoveColumnActionCommand = ReactiveCommand.Create(DoRemoveColumnActionCommand);
-    MoveUpColumnActionCommand = ReactiveCommand.Create(DoMoveUpColumnActionCommand);
-    MoveDownColumnActionCommand = ReactiveCommand.Create(DoMoveDownColumnActionCommand);
+    AddColumnActionCommand = ReactiveCommand.Create(DoAddColumnActionCommand,
+      this.WhenAnyValue(
+        x => x.SelectedAvailableColumnAction,
+        x => !string.IsNullOrEmpty(x)));
+    RemoveColumnActionCommand = ReactiveCommand.Create(DoRemoveColumnActionCommand,
+      this.WhenAnyValue(
+        x => x.SelectedActiveColumnAction,
+        x => !string.IsNullOrEmpty(x)));
+    MoveUpColumnActionCommand = ReactiveCommand.Create(
+      DoMoveUpColumnActionCommand,
+      this.WhenAnyValue(
+        x => x.SelectedActiveColumnAction,
+        x => ActiveColumnActions.IndexOf(x) > 0));
+    MoveDownColumnActionCommand = ReactiveCommand.Create(
+      DoMoveDownColumnActionCommand,
+      this.WhenAnyValue(
+        x => x.SelectedActiveColumnAction,
+        x => ActiveColumnActions.IndexOf(x) < ActiveColumnActions.Count - 1 && !string.IsNullOrEmpty(x)));
 
     PropertyChanged += OnPropertyChanged;
   }
@@ -86,7 +101,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
   private async Task DoOpenFromFileCommand()
   {
-    var app = (IClassicDesktopStyleApplicationLifetime) _parent.ApplicationLifetime!;
+    var app = (IClassicDesktopStyleApplicationLifetime)_parent.ApplicationLifetime!;
     var topLevel = TopLevel.GetTopLevel(app.MainWindow);
 
     // Start async operation to open the dialog.
@@ -95,8 +110,8 @@ public partial class MainWindowViewModel : ViewModelBase
       Title = "Open CSV File",
       FileTypeFilter =
       [
-        new FilePickerFileType("CSV files (*.csv)") {Patterns = ["*.csv"]},
-        new FilePickerFileType("All files (*.*)") {Patterns = ["*.*"]}
+        new FilePickerFileType("CSV files (*.csv)") { Patterns = ["*.csv"] },
+        new FilePickerFileType("All files (*.*)") { Patterns = ["*.*"] }
       ],
       AllowMultiple = false
     });
@@ -148,7 +163,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
   private async Task DoSaveToFileCommand()
   {
-    var app = (IClassicDesktopStyleApplicationLifetime) _parent.ApplicationLifetime!;
+    var app = (IClassicDesktopStyleApplicationLifetime)_parent.ApplicationLifetime!;
     var topLevel = TopLevel.GetTopLevel(app.MainWindow);
 
     // Start async operation to open the dialog.
@@ -157,8 +172,8 @@ public partial class MainWindowViewModel : ViewModelBase
       Title = "Save CSV File",
       FileTypeChoices =
       [
-        new FilePickerFileType("CSV files (*.csv)") {Patterns = ["*.csv"]},
-        new FilePickerFileType("All files (*.*)") {Patterns = ["*.*"]}
+        new FilePickerFileType("CSV files (*.csv)") { Patterns = ["*.csv"] },
+        new FilePickerFileType("All files (*.*)") { Patterns = ["*.*"] }
       ],
       DefaultExtension = ".csv",
       ShowOverwritePrompt = true,
