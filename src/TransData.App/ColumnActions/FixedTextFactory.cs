@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using TransData.App.Interfaces;
 
 namespace TransData.App.ColumnActions;
@@ -12,6 +13,6 @@ public class FixedTextFactory : IColumnActionFactory
 
   public IColumnAction Create(string configuration)
   {
-    return new FixedText(configuration);
+    return string.IsNullOrWhiteSpace(configuration) ? new FixedText() : JsonConvert.DeserializeObject<FixedText>(configuration);
   }
 }

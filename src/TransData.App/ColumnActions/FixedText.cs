@@ -4,19 +4,12 @@ namespace TransData.App.ColumnActions;
 
 public class FixedText : IColumnAction
 {
-  public string FactoryIdentifier { get; } = FixedTextFactory.FactoryIdentifier;
-  public string Name { get; } = "Fixed Text";
-  public string ConfigurationJson { get; set; }
-
-  public FixedText(string configurationJson)
-  {
-    ConfigurationJson = configurationJson;
-  }
+  public string FactoryIdentifier { get; set; } = FixedTextFactory.FactoryIdentifier;
+  public string Name { get; set; } = "Fixed Text";
+  public string Text { get; set; } = "FIXED";
 
   public string Transform(string rawData)
   {
-    return "FIXED";
+    return Text;
   }
-
-  private record Configuration(string Text);
 }

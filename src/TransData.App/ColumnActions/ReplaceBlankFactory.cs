@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using TransData.App.Interfaces;
 
 namespace TransData.App.ColumnActions;
@@ -12,6 +13,6 @@ public class ReplaceBlankFactory : IColumnActionFactory
 
   public IColumnAction Create(string configuration)
   {
-    return new ReplaceBlank(configuration);
+    return string.IsNullOrWhiteSpace(configuration) ? new ReplaceBlank() : JsonConvert.DeserializeObject<ReplaceBlank>(configuration);
   }
 }

@@ -4,14 +4,11 @@ namespace TransData.App.ColumnActions;
 
 public class ReplaceText : IColumnAction
 {
-  public string FactoryIdentifier { get; } = ReplaceTextFactory.FactoryIdentifier;
-  public string Name { get; } = "Replace Text";
-  public string ConfigurationJson { get; set; }
-
-  public ReplaceText(string configurationJson)
-  {
-    ConfigurationJson = configurationJson;
-  }
+  public string FactoryIdentifier { get; set; } = ReplaceTextFactory.FactoryIdentifier;
+  public string Name { get; set; } = "Replace Text";
+  public string TargetText { get; set; } = "NA";
+  public string Text { get; set; } = "REPLACE";
+  public Location TextLocation { get; set; } = Location.Start;
 
   public string Transform(string rawData)
   {
@@ -19,15 +16,13 @@ public class ReplaceText : IColumnAction
     //    start
     //    end
     //    anywhere
-    return "REPLACE";
+    return Text;
   }
 
-  private enum Location
+  public enum Location
   {
     Start,
     End,
     Anywhere
   }
-
-  private record Configuration(string Targettext, string Text, Location Location);
 }

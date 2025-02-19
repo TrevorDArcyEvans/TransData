@@ -4,19 +4,12 @@ namespace TransData.App.ColumnActions;
 
 public class ReplaceBlank : IColumnAction
 {
-  public string FactoryIdentifier { get; } = ReplaceBlankFactory.FactoryIdentifier;
-  public string Name { get; } = "Replace Blank";
-  public string ConfigurationJson { get; set; }
-
-  public ReplaceBlank(string configurationJson)
-  {
-    ConfigurationJson = configurationJson;
-  }
+  public string FactoryIdentifier { get; set; } = ReplaceBlankFactory.FactoryIdentifier;
+  public string Name { get; set; } = "Replace Blank";
+  public string Text { get; set; } = "MISSING";
 
   public string Transform(string rawData)
   {
-    return string.IsNullOrEmpty(rawData) ? "MISSING" : rawData;
+    return string.IsNullOrEmpty(rawData) ? Text : rawData;
   }
-
-  private record Configuration(string Text);
 }
