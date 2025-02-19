@@ -4,6 +4,7 @@ namespace TransData.App.ColumnActions;
 
 public class ReplaceBlank : IColumnAction
 {
+  public string FactoryIdentifier { get; } = "ReplaceBlank";
   public string Name { get; } = "Replace Blank";
   public string Configuration { get; set; }
 
