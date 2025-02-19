@@ -21,7 +21,7 @@ public partial class MainWindow : Window
 
   private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
   {
-    var vm = (MainWindowViewModel)DataContext!;
+    var vm = (MainWindowViewModel) DataContext!;
     switch (e.PropertyName)
     {
       case nameof(vm.InputDataTable):
@@ -83,11 +83,19 @@ public partial class MainWindow : Window
 
   private static void UpdateTransformedColumn(MainWindowViewModel vm)
   {
-    // "" --> MISSING
+    if (vm.SelectedColumn == null)
+    {
+      return;
+    }
+
     foreach (DataRow row in vm.TransformedInputDataTable.Rows)
     {
-      var currVal = (string)row[vm.SelectedColumn.ColumnName];
-      row[vm.SelectedColumn.ColumnName + TransformSuffix] = string.IsNullOrWhiteSpace(currVal) ? "MISSING" : currVal;
+      var currVal = (string) row[vm.SelectedColumn.ColumnName];
+      foreach (var colAct in vm.ActiveColumnActions)
+      {
+        row[vm.SelectedColumn.ColumnName + TransformSuffix] = colAct.Transform(currVal);
+        currVal = (string) row[vm.SelectedColumn.ColumnName + TransformSuffix];
+      }
     }
   }
 
