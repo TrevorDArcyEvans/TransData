@@ -62,7 +62,9 @@
             SelectedItem="{Binding SelectedAvailableColumnAction}">
             <ListBox.ItemTemplate>
               <DataTemplate>
-                <TextBlock Text="{Binding Name}" />
+                <TextBlock
+                  Text="{Binding Name}"
+                  ToolTip.Tip="{Binding Description}" />
               </DataTemplate>
             </ListBox.ItemTemplate>
           </ListBox>
@@ -86,13 +88,13 @@
           <ListBox
             Grid.Row="1" Grid.Column="4" Grid.RowSpan="5"
             ItemsSource="{Binding ActiveColumnActions}"
-            SelectedItem="{Binding SelectedActiveColumnAction}" >
+            SelectedItem="{Binding SelectedActiveColumnAction}">
             <ListBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Text="{Binding Name}" />
               </DataTemplate>
             </ListBox.ItemTemplate>
-            </ListBox>
+          </ListBox>
 
 
           <TextBlock
@@ -100,8 +102,8 @@
             Text="Active Column Action Configuration" />
           <TextBox
             Grid.Row="1" Grid.Column="5" Grid.RowSpan="5"
-            AcceptsReturn="True" TextWrapping="Wrap" 
-            Text="current configuration"/>
+            AcceptsReturn="True" TextWrapping="Wrap"
+            Text="current configuration" />
         </Grid>
       </TabItem>
 
