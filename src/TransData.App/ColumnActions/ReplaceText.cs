@@ -1,3 +1,4 @@
+using System;
 using TransData.App.Interfaces;
 
 namespace TransData.App.ColumnActions;
@@ -12,11 +13,37 @@ public class ReplaceText : IColumnAction
 
   public string Transform(string rawData)
   {
-    // target text at:
-    //    start
-    //    end
-    //    anywhere
-    return Text;
+    switch (TextLocation)
+    {
+      case Location.Start:
+        if (rawData.StartsWith(TargetText))
+        {
+          return rawData.Replace(TargetText, Text);
+        }
+
+        break;
+
+      case Location.End:
+        if (rawData.EndsWith(TargetText))
+        {
+          return rawData.Replace(TargetText, Text);
+        }
+
+        break;
+
+      case Location.Anywhere:
+        if (rawData.Contains(TargetText))
+        {
+          return rawData.Replace(TargetText, Text);
+        }
+
+        break;
+
+      default:
+        throw new ArgumentOutOfRangeException();
+    }
+
+    return rawData;
   }
 
   public enum Location
