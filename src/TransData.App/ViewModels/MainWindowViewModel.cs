@@ -46,7 +46,8 @@ public partial class MainWindowViewModel : ViewModelBase
   [
     new ReplaceBlankFactory(),
     new FixedTextFactory(),
-    new ReplaceTextFactory()
+    new ReplaceTextFactory(),
+    new TrimTextFactory()
   ];
 
   [ObservableProperty]
