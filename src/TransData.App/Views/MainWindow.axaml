@@ -59,7 +59,13 @@
           <ListBox
             Grid.Row="1" Grid.Column="2" Grid.RowSpan="5"
             ItemsSource="{Binding AvailableColumnActions}"
-            SelectedItem="{Binding SelectedAvailableColumnAction}" />
+            SelectedItem="{Binding SelectedAvailableColumnAction}">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Name}" />
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
 
           <Button
             Grid.Row="1" Grid.Column="3" Content="&#x2190;" FontSize="36"
@@ -80,14 +86,22 @@
           <ListBox
             Grid.Row="1" Grid.Column="4" Grid.RowSpan="5"
             ItemsSource="{Binding ActiveColumnActions}"
-            SelectedItem="{Binding SelectedActiveColumnAction}" />
+            SelectedItem="{Binding SelectedActiveColumnAction}" >
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Name}" />
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+            </ListBox>
+
 
           <TextBlock
             Grid.Row="0" Grid.Column="5"
             Text="Active Column Action Configuration" />
           <TextBox
             Grid.Row="1" Grid.Column="5" Grid.RowSpan="5"
-            AcceptsReturn="True" TextWrapping="Wrap" />
+            AcceptsReturn="True" TextWrapping="Wrap" 
+            Text="{Binding SelectedActiveColumnAction.Configuration}"/>
         </Grid>
       </TabItem>
 

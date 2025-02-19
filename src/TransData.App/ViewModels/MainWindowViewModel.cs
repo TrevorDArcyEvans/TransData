@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CsvHelper;
 using CsvHelper.Configuration;
 using ReactiveUI;
+using TransData.App.ColumnActions;
+using TransData.App.Interfaces;
 
 namespace TransData.App.ViewModels;
 
@@ -39,15 +42,15 @@ public partial class MainWindowViewModel : ViewModelBase
   public DataTable InputDataTable { get; set; } = new();
   public DataTable TransformedInputDataTable { get; set; } = new();
 
-  public ObservableCollection<string> AvailableColumnActions { get; set; } = ["aaa", "bbb", "ccc", "ddd", "eee"];
+  public ObservableCollection<IColumnActionFactory> AvailableColumnActions { get; set; } = [new ReplaceBlankFactory()];
 
   [ObservableProperty]
-  public string _SelectedAvailableColumnAction = string.Empty;
+  public IColumnActionFactory _SelectedAvailableColumnAction;
 
-  public ObservableCollection<string> ActiveColumnActions { get; set; } = ["fff", "ggg", "hhh", "iii", "jjj"];
+  public ObservableCollection<IColumnAction> ActiveColumnActions { get; set; } = new();
 
   [ObservableProperty]
-  public string _SelectedActiveColumnAction = string.Empty;
+  public IColumnAction _SelectedActiveColumnAction;
 
   private readonly App _parent;
 
@@ -57,15 +60,15 @@ public partial class MainWindowViewModel : ViewModelBase
 
     OpenFromFileCommand = ReactiveCommand.CreateFromTask(DoOpenFromFileCommand);
     SaveToFileCommand = ReactiveCommand.CreateFromTask(DoSaveToFileCommand);
-
-    AddColumnActionCommand = ReactiveCommand.Create(DoAddColumnActionCommand,
-      this.WhenAnyValue(
-        x => x.SelectedAvailableColumnAction,
-        x => !string.IsNullOrEmpty(x)));
-    RemoveColumnActionCommand = ReactiveCommand.Create(DoRemoveColumnActionCommand,
-      this.WhenAnyValue(
-        x => x.SelectedActiveColumnAction,
-        x => !string.IsNullOrEmpty(x)));
+    
+    AddColumnActionCommand = ReactiveCommand.Create(DoAddColumnActionCommand);//,
+      // this.WhenAnyValue(
+      //   x => x.SelectedAvailableColumnAction,
+      // x => x != null));
+    RemoveColumnActionCommand = ReactiveCommand.Create(DoRemoveColumnActionCommand);//,
+      // this.WhenAnyValue(
+      //   x => x.SelectedActiveColumnAction,
+      // x => x != null));
     MoveUpColumnActionCommand = ReactiveCommand.Create(
       DoMoveUpColumnActionCommand,
       this.WhenAnyValue(
@@ -75,7 +78,7 @@ public partial class MainWindowViewModel : ViewModelBase
       DoMoveDownColumnActionCommand,
       this.WhenAnyValue(
         x => x.SelectedActiveColumnAction,
-        x => ActiveColumnActions.IndexOf(x) < ActiveColumnActions.Count - 1 && !string.IsNullOrEmpty(x)));
+        x => ActiveColumnActions.IndexOf(x) < ActiveColumnActions.Count - 1 && x != null));
 
     PropertyChanged += OnPropertyChanged;
   }
@@ -100,7 +103,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
   private async Task DoOpenFromFileCommand()
   {
-    var app = (IClassicDesktopStyleApplicationLifetime)_parent.ApplicationLifetime!;
+    var app = (IClassicDesktopStyleApplicationLifetime) _parent.ApplicationLifetime!;
     var topLevel = TopLevel.GetTopLevel(app.MainWindow);
 
     // Start async operation to open the dialog.
@@ -109,8 +112,8 @@ public partial class MainWindowViewModel : ViewModelBase
       Title = "Open CSV File",
       FileTypeFilter =
       [
-        new FilePickerFileType("CSV files (*.csv)") { Patterns = ["*.csv"] },
-        new FilePickerFileType("All files (*.*)") { Patterns = ["*.*"] }
+        new FilePickerFileType("CSV files (*.csv)") {Patterns = ["*.csv"]},
+        new FilePickerFileType("All files (*.*)") {Patterns = ["*.*"]}
       ],
       AllowMultiple = false
     });
@@ -163,7 +166,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
   private async Task DoSaveToFileCommand()
   {
-    var app = (IClassicDesktopStyleApplicationLifetime)_parent.ApplicationLifetime!;
+    var app = (IClassicDesktopStyleApplicationLifetime) _parent.ApplicationLifetime!;
     var topLevel = TopLevel.GetTopLevel(app.MainWindow);
 
     // Start async operation to open the dialog.
@@ -172,8 +175,8 @@ public partial class MainWindowViewModel : ViewModelBase
       Title = "Save CSV File",
       FileTypeChoices =
       [
-        new FilePickerFileType("CSV files (*.csv)") { Patterns = ["*.csv"] },
-        new FilePickerFileType("All files (*.*)") { Patterns = ["*.*"] }
+        new FilePickerFileType("CSV files (*.csv)") {Patterns = ["*.csv"]},
+        new FilePickerFileType("All files (*.*)") {Patterns = ["*.*"]}
       ],
       DefaultExtension = ".csv",
       ShowOverwritePrompt = true,
@@ -189,7 +192,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
   private void DoAddColumnActionCommand()
   {
-    ActiveColumnActions.Add(SelectedAvailableColumnAction);
+    ActiveColumnActions.Add(SelectedAvailableColumnAction.Create());
     OnPropertyChanged(nameof(ActiveColumnActions));
   }
 
