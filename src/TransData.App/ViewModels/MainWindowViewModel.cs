@@ -42,7 +42,11 @@ public partial class MainWindowViewModel : ViewModelBase
   public DataTable InputDataTable { get; set; } = new();
   public DataTable TransformedInputDataTable { get; set; } = new();
 
-  public ObservableCollection<IColumnActionFactory> AvailableColumnActions { get; set; } = [new ReplaceBlankFactory()];
+  public ObservableCollection<IColumnActionFactory> AvailableColumnActions { get; set; } =
+  [
+    new ReplaceBlankFactory(),
+    new FixedTextFactory()
+  ];
 
   [ObservableProperty]
   public IColumnActionFactory _SelectedAvailableColumnAction;
@@ -60,15 +64,15 @@ public partial class MainWindowViewModel : ViewModelBase
 
     OpenFromFileCommand = ReactiveCommand.CreateFromTask(DoOpenFromFileCommand);
     SaveToFileCommand = ReactiveCommand.CreateFromTask(DoSaveToFileCommand);
-    
-    AddColumnActionCommand = ReactiveCommand.Create(DoAddColumnActionCommand);//,
-      // this.WhenAnyValue(
-      //   x => x.SelectedAvailableColumnAction,
-      // x => x != null));
-    RemoveColumnActionCommand = ReactiveCommand.Create(DoRemoveColumnActionCommand);//,
-      // this.WhenAnyValue(
-      //   x => x.SelectedActiveColumnAction,
-      // x => x != null));
+
+    AddColumnActionCommand = ReactiveCommand.Create(DoAddColumnActionCommand); //,
+    // this.WhenAnyValue(
+    //   x => x.SelectedAvailableColumnAction,
+    // x => x != null));
+    RemoveColumnActionCommand = ReactiveCommand.Create(DoRemoveColumnActionCommand); //,
+    // this.WhenAnyValue(
+    //   x => x.SelectedActiveColumnAction,
+    // x => x != null));
     MoveUpColumnActionCommand = ReactiveCommand.Create(
       DoMoveUpColumnActionCommand,
       this.WhenAnyValue(
