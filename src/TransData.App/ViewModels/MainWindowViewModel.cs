@@ -45,7 +45,8 @@ public partial class MainWindowViewModel : ViewModelBase
   public ObservableCollection<IColumnActionFactory> AvailableColumnActions { get; set; } =
   [
     new ReplaceBlankFactory(),
-    new FixedTextFactory()
+    new FixedTextFactory(),
+    new ReplaceTextFactory()
   ];
 
   [ObservableProperty]
