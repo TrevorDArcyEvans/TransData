@@ -6,11 +6,11 @@ public class ReplaceText : IColumnAction
 {
   public string FactoryIdentifier { get; } = ReplaceTextFactory.FactoryIdentifier;
   public string Name { get; } = "Replace Text";
-  public string Configuration { get; set; }
+  public string ConfigurationJson { get; set; }
 
-  public ReplaceText(string configuration)
+  public ReplaceText(string configurationJson)
   {
-    Configuration = configuration;
+    ConfigurationJson = configurationJson;
   }
 
   public string Transform(string rawData)
@@ -21,4 +21,13 @@ public class ReplaceText : IColumnAction
     //    anywhere
     return "REPLACE";
   }
+
+  private enum Location
+  {
+    Start,
+    End,
+    Anywhere
+  }
+
+  private record Configuration(string Targettext, string Text, Location Location);
 }
