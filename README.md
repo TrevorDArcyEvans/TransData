@@ -63,6 +63,17 @@ dotnet run
 * [EtlLib](https://github.com/cylewitruk/EtlLib)
 
 
+## [Avalonia issues](https://github.com/AvaloniaUI/Avalonia/issues)
+* [AvaloniaDictionary does not show ItemTemplate](https://github.com/AvaloniaUI/Avalonia/issues/18296)
+* [BindingOperations.GetBindingExpressionBase().UpdateSource() does not update ItemsSource](https://github.com/AvaloniaUI/Avalonia/issues/18297)
+* [BindingOperations.GetBindingExpressionBase().UpdateSource() second time deletes ItemsSource](https://github.com/AvaloniaUI/Avalonia/issues/18298)
+* [UserControl inside TabControl's TabItem is loosing its DataContext on Selected Tab is changed](https://github.com/AvaloniaUI/Avalonia/issues/18280)
+* [DataGrid refresh doesn't work while the refreshed row attached to VisualTree](https://github.com/AvaloniaUI/Avalonia/issues/17110)
+* [Disable Scrollbar in Datagrid](https://github.com/AvaloniaUI/Avalonia/issues/16998)
+* [DataGrid does not update OneWay bound values on arrays](https://github.com/AvaloniaUI/Avalonia/issues/16889)
+* [Filtering of DataGrid bound to ObservableCollection](https://github.com/AvaloniaUI/Avalonia/issues/15728)
+* [DataGrid does not update for some ObservableCollection operations](https://github.com/AvaloniaUI/Avalonia/issues/13621)
+
 ## Acknowledgements
 * icon from [OPENCLIPART](https://openclipart.org/)
   * [transpose](https://openclipart.org/detail/305559/transpose-pivottable-rotate-statistics)
